@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "es2017",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "module": "commonjs",
+        "outDir": "./dist/server",
+        "rootDir": "./",
+        "strict": false,
+        "strictPropertyInitialization": false,
+        "sourceMap": true,
+        "typeRoots": [
+            "node_modules/@types"
+        ]
+    },
+    "include": [
+        "src/socket-controllers/index"
+    ],
+    "exclude": [
+        "dist",
+        "node_modules"
+    ]
+}
