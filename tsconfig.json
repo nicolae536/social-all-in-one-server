@@ -14,7 +14,7 @@
         ]
     },
     "include": [
-        "src/socket-controllers/index"
+        "src/controllers/index"
     ],
     "exclude": [
         "dist",

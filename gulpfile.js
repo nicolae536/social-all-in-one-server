@@ -5,7 +5,7 @@ const runSequence = require('run-sequence');
 
 const sourcemaps = require('gulp-sourcemaps');
 const ts = require('gulp-typescript');
-const nodemon = require('gulp-nodemon');
+// const nodemon = require('gulp-nodemon');
 
 const tsConfigPath = path.resolve(__dirname + '/tsconfig.json');
 const tsCompilerOptions = require(tsConfigPath).compilerOptions;
@@ -38,14 +38,14 @@ gulp.task('watch', ['build'], () => {
     gulp.watch(['./package.json'], ['copy']);
     gulp.watch(['src/**/*.ts'], ['ts']);
 
-    return nodemon({
-        execMap: {
-            js: "node --inspect --harmony"
-        },
-        script: 'dist/src/index.js',
-        watch: 'dist',
-        ext: 'js',
-        debug: true,
-        delay: 1000
-    });
+    // return nodemon({
+    //     execMap: {
+    //         js: "node --inspect --harmony"
+    //     },
+    //     script: 'dist/src/index.js',
+    //     watch: 'dist',
+    //     ext: 'js',
+    //     debug: true,
+    //     delay: 1000
+    // });
 });

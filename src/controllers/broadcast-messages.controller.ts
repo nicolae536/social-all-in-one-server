@@ -3,7 +3,7 @@ import {Command, CommandController} from '../decorators';
 import {PublicMessage, IWebMessage} from '../models';
 import {IWebConnection} from './web-connection';
 
-@CommandController
+@CommandController()
 export class BroadcastMessagesController {
   @Inject
   private webSocketServer: IWebConnection;

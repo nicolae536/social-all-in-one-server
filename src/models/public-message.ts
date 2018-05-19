@@ -1,4 +1,4 @@
-import {WebMessageError} from '../utils';
+import {CommunicationError} from '../utils';
 
 export class PublicMessage {
   fromUser: string;
@@ -15,8 +15,7 @@ export class PublicMessage {
 
       return out;
     } catch (e) {
-      throw new WebMessageError('Invalid message payload');
-    }
+      CommunicationError.unsuportedMessage(e);    }
 
   }
 }

@@ -1,2 +1,2 @@
 export {Command} from './command';
-export {CommandController} from './weire-commands';
+export {CommandController} from './command-controller';

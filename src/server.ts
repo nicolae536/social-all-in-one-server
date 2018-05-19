@@ -1,38 +1,39 @@
 import * as express from 'express';
 import * as http from 'http';
-import {Container, Scope} from 'typescript-ioc';
+import * as mongoose from 'mongoose';
+import {Mongoose} from 'mongoose';
 import * as WebSocket from 'ws';
-import {RootMessageProcessor} from './root-processor';
+import {setupSocketListeners} from './utils/server-helpers';
+
 
 const app = express();
 //initialize a simple http server
 const server = http.createServer(app);
 // to force decorators evaluation on services
-require('./socket-controllers');
+require('./controllers');
 
 export class WebSocketServer extends WebSocket.Server {
+  private connectionString: string;
+
   constructor() {
     super({server: server});
   }
 
-  start() {
-    this.on('connection', (ws: WebSocket) => {
-      //connection is up, let's add a simple simple event
-      ws.on('message', (message: string) => {
-        try {
-          // dynamic configuration for web socket so we have a provider for it on each request pointing to the current web socket
-          // when creating new classes using Ioc
-          Container.bind(WebSocket).to(WebSocket).provider({
-            get: () => ws
-          }).scope(Scope.Local);
-          RootMessageProcessor.processMessage(message);
-        } catch (e) {
-          console.error(e.message);
-        }
-      });
+  configure() {
+    this.connectionString = `mongodb://127.0.0.1:27017/social-all-in-one`;
+  }
 
-      //send immediately a feedback to the incoming connection
-      ws.send('Hi there, I am a WebSocket server');
+  async start() {
+    const mongose: Mongoose = await mongoose.connect(this.connectionString, );
+
+    if (!mongose.connection) {
+      console.error('Cannot connect to mongodb');
+      return;
+    }
+
+    this.on('connection', (ws: WebSocket, request) => {
+      //connection is up, let's add a simple simple event
+      setupSocketListeners(this, ws, request);
     });
 
     server.listen(process.env.PORT || 8999, () => {

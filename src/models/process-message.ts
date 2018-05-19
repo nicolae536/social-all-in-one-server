@@ -1,5 +1,5 @@
 import {IWebMessage} from './web-message';
 
 export interface IProcessMessage {
-  processCommand(message: IWebMessage<string>): void;
+  processCommand(message: IWebMessage<string>): Promise<any>;
 }
