@@ -15,12 +15,11 @@ export function onSocketConnection(server: WebSocketServer, ws: WebSocket, reque
       const webM: IWebMessage<string> = WebMessage.fromMessage(message, webConnection, request);
 
       const processor = WebControllerFactory.getController(webM.type);
-      if (processor) {
-        await processor.processCommand(webM);
+      if (!processor) {
+        CommunicationError.unsuportedMessage(webM);
       }
 
-      CommunicationError.unsuportedMessage(webM);
-
+      await processor.processCommand(webM);
     } catch (e) {
       rootErrorHandler(e, (error: string) => ws.send(error));
     }

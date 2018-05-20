@@ -1,5 +1,7 @@
 import * as express from 'express';
+import * as glob from 'glob';
 import * as http from 'http';
+import * as path from 'path';
 import * as mongoose from 'mongoose';
 import {Mongoose} from 'mongoose';
 import * as WebSocket from 'ws';
@@ -8,8 +10,11 @@ import {onSocketConnection} from './utils/server-helpers';
 const app = express();
 //initialize a simple http server
 const server = http.createServer(app);
+
 // to force decorators evaluation on services
-require('./controllers');
+glob.sync('**/socket-routes/**/*.js').forEach(function (file) {
+  require(path.resolve(file));
+});
 
 export class WebSocketServer extends WebSocket.Server {
   private connectionString: string;
@@ -23,7 +28,7 @@ export class WebSocketServer extends WebSocket.Server {
   }
 
   async start() {
-    const mongose: Mongoose = await mongoose.connect(this.connectionString, );
+    const mongose: Mongoose = await mongoose.connect(this.connectionString);
 
     if (!mongose.connection) {
       console.error('Cannot connect to mongodb');

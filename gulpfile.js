@@ -11,7 +11,7 @@ const tsConfigPath = path.resolve(__dirname + '/tsconfig.json');
 const tsCompilerOptions = require(tsConfigPath).compilerOptions;
 const tsRootDir = path.resolve(__dirname + '/' + tsCompilerOptions.rootDir);
 
-const tsProject = ts.createProject(tsCompilerOptions);
+const tsProject = ts.createProject(tsConfigPath);
 
 gulp.task('clean', () => {
     return del('dist');
@@ -34,13 +34,16 @@ gulp.task('build', (done) => {
     runSequence('clean', ['copy', 'ts'], done);
 });
 
+// Find process on windows
+// netstat -ano | findstr :yourPortNumber
+
 gulp.task('watch', ['build'], () => {
     gulp.watch(['./package.json'], ['copy']);
     gulp.watch(['src/**/*.ts'], ['ts']);
 
     // return nodemon({
     //     execMap: {
-    //         js: "node --inspect --harmony"
+    //         js: "node --inspect --inspect-brk"
     //     },
     //     script: 'dist/src/index.js',
     //     watch: 'dist',
