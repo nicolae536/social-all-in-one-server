@@ -32,7 +32,7 @@ export class DsUsersRepoImpl implements DsUsersRepo {
     }
 
     const userPassword = hashString(options.password, user.salt);
-    if (userPassword.passwordHash !== options.password) {
+    if (userPassword.passwordHash !== user.hashPassword) {
       return null;
     }
 

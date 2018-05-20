@@ -1,6 +1,6 @@
 import {Container} from 'typescript-ioc';
-import {IProcessMessage} from '../models';
 import {PROCESSORS_MAP} from '../decorators/command';
+import {IProcessMessage} from '../models';
 
 export class WebControllerFactory {
   static commandControllers: Map<string, (...args) => void> = PROCESSORS_MAP;

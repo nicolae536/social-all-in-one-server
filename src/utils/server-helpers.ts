@@ -1,24 +1,33 @@
 import {IncomingMessage} from 'http';
-import {Container, Scope} from 'typescript-ioc';
 import * as WebSocket from 'ws';
-import {RootMessageProcessor} from '../root-processor';
+import {IWebMessage, WebMessage} from '../models';
 import {WebSocketServer} from '../server';
+import {WebConnection} from '../web-connection';
 import {CommunicationError, ImplementationError, ServerError} from './util';
+import {WebControllerFactory} from './web-controller-factory';
 
-export function setupSocketListeners(server: WebSocketServer, ws: WebSocket, request: IncomingMessage) {
+export function onSocketConnection(server: WebSocketServer, ws: WebSocket, request: IncomingMessage) {
+
+  let webConnection = new WebConnection(server, ws);
+
   ws.on('message', async (message: string) => {
-    {
-      try {
-        // dynamic configuration for web socket so we have a provider for it on each request pointing to the current web socket
-        // when creating new classes using Ioc
-        Container.bind(WebSocket).to(WebSocket).provider({
-          get: () => ws
-        }).scope(Scope.Local);
-        await RootMessageProcessor.processMessage(message, request);
-      } catch (e) {
-        rootErrorHandler(e, (error: string) => ws.send(error));
+    try {
+      const webM: IWebMessage<string> = WebMessage.fromMessage(message, webConnection, request);
+
+      const processor = WebControllerFactory.getController(webM.type);
+      if (processor) {
+        await processor.processCommand(webM);
       }
+
+      CommunicationError.unsuportedMessage(webM);
+
+    } catch (e) {
+      rootErrorHandler(e, (error: string) => ws.send(error));
     }
+  });
+
+  ws.on('close', () => {
+    webConnection = null;
   });
 }
 

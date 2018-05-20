@@ -1,7 +1,6 @@
-import {Provides, Inject, Container} from 'typescript-ioc';
 import * as WebSocket from 'ws';
-import {IWebMessage} from '../models';
-import {WebSocketServer} from '../server';
+import {IWebMessage} from './models';
+import {WebSocketServer} from './server';
 
 export abstract class IWebConnection {
   abstract replay(message: IWebMessage<any>, payload?: Object): void;
@@ -9,13 +8,13 @@ export abstract class IWebConnection {
   abstract broadcastReply(message: IWebMessage<any>): void;
 }
 
-@Provides(IWebConnection)
 export class WebConnection implements IWebConnection {
-  server: WebSocketServer = Container.get(WebSocketServer);
-  @Inject
-  ws: WebSocket;
+  public readonly server: WebSocketServer;
+  private readonly ws: WebSocket;
 
-  constructor() {
+  constructor(server: WebSocketServer, ws: WebSocket) {
+    this.server = server;
+    this.ws = ws;
   }
 
   replay(message: IWebMessage<any>, payload: Object): void {

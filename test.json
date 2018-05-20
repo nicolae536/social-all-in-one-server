@@ -1,0 +1,27 @@
+{
+    "_id": "",
+    "participants": {
+        "userId_1": {
+            "name": "name in this conversation",
+            "pendingMessages": [
+                {
+                    "messageId": "",
+                    "state": "sent|seen|sending"
+                }
+            ]
+        },
+        "userId_2": {
+        },
+        "userId_3": {
+        }
+    },
+    "messages": [
+        {
+            "timeStamp": "",
+            "content": "",
+            "files": [],
+            "_id": "",
+            "userId": ""
+        }
+    ]
+}

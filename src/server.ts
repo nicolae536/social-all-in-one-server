@@ -3,8 +3,7 @@ import * as http from 'http';
 import * as mongoose from 'mongoose';
 import {Mongoose} from 'mongoose';
 import * as WebSocket from 'ws';
-import {setupSocketListeners} from './utils/server-helpers';
-
+import {onSocketConnection} from './utils/server-helpers';
 
 const app = express();
 //initialize a simple http server
@@ -32,8 +31,8 @@ export class WebSocketServer extends WebSocket.Server {
     }
 
     this.on('connection', (ws: WebSocket, request) => {
-      //connection is up, let's add a simple simple event
-      setupSocketListeners(this, ws, request);
+      //connectionDef is up, let's add a simple simple event
+      onSocketConnection(this, ws, request);
     });
 
     server.listen(process.env.PORT || 8999, () => {

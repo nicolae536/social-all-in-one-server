@@ -1,13 +1,8 @@
-import {Inject} from 'typescript-ioc';
 import {Command, CommandController} from '../decorators';
 import {PublicMessage, IWebMessage} from '../models';
-import {IWebConnection} from './web-connection';
 
 @CommandController()
 export class BroadcastMessagesController {
-  @Inject
-  private webSocketServer: IWebConnection;
-
   constructor() {
   };
 
